@@ -11,25 +11,25 @@ package banco.Entidades;
  */
 public class CuentaBanco {
 
-    private Integer numeroCuenta;
+    private Integer accountNumber;
     private Integer numDni;
-    private double saldoActual;
+    private double  availableBalance;
 
     public CuentaBanco(Integer numeroCuenta, Integer numDni, double saldoActual) {
-        this.numeroCuenta = numeroCuenta;
+        this.accountNumber = numeroCuenta;
         this.numDni = numDni;
-        this.saldoActual = saldoActual;
+        this.availableBalance = saldoActual;
     }
 
     public CuentaBanco() {
     }
 
-    public Integer getNumeroCuenta() {
-        return numeroCuenta;
+    public Integer getAccountNumber() {
+        return accountNumber;
     }
 
-    public void setNumeroCuenta(Integer numeroCuenta) {
-        this.numeroCuenta = numeroCuenta;
+    public void setNumeroCuenta(Integer accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public Integer getNumDni() {
@@ -40,17 +40,17 @@ public class CuentaBanco {
         this.numDni = numDni;
     }
 
-    public double getSaldoActual() {
-        return saldoActual;
+    public double getAvailableBalance() {
+        return availableBalance;
     }
 
-    public void setSaldoActual(double saldoActual) {
-        this.saldoActual = saldoActual;
+    public void setAvailableBalance(double availableBalance) {
+        this.availableBalance = availableBalance;
     }
 
     @Override
     public String toString() {
-        return "CuentaBanco{" + "numeroCuenta=" + numeroCuenta + ", numDni=" + numDni + ", saldoActual=" + saldoActual + '}';
+        return "CuentaBanco{" + "numeroCuenta=" + accountNumber + ", numDni=" + numDni + ", saldoActual=" + availableBalance + '}';
     }
 
 

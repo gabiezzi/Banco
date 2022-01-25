@@ -18,55 +18,107 @@ public class ServiciosBanco {
 
     public CuentaBanco crearCuenta() {
 
-        int numCuenta;
+        int accountNumber;
         int dni;
-        double saldoActual;
-
-        System.out.println("Ingrese el dni!");
-
-        numCuenta = Integer.parseInt(scan.next());
+        double availableBalance;
 
         System.out.println("Ingrese numero de cuenta!");
+
+        accountNumber = Integer.parseInt(scan.next());
+
+        System.out.println("Ingrese numero de dni!");
 
         dni = Integer.parseInt(scan.next());
 
         System.out.println("Ingrese el saldo de su cuenta!");
 
-        saldoActual = scan.nextDouble();
-
-        return new CuentaBanco(numCuenta, dni, saldoActual);
-
-    }
-
-    public Double depositarDinero(Double dineroIngresado, Double saldoActual) {
-
-        return dineroIngresado + saldoActual;
+        availableBalance = scan.nextDouble();
+        
+        return new CuentaBanco(accountNumber, dni, availableBalance);
 
     }
 
-    public Double retirarDinero(Double dineroARetirar, Double saldoActual) {
+    public boolean validateAccountNumber(int accountNumber) {
 
-        return (saldoActual - dineroARetirar);
+        if (accountNumber > 0 || accountNumber < 5000) {
+
+            return true;
+
+        }
+
+        return false;
+    }
+
+    public boolean validateDniNumber(int numDni) {
+
+        if (numDni > 0) {
+
+            return true;
+
+        }
+
+        return false;
+    }
+
+    public boolean validateAvailableBalance(int availableBalance) {
+
+        if (availableBalance >= 0) {
+
+            return true;
+
+        }
+
+        return false;
+    }
+
+    public boolean validateTransaction(Double money) {
+
+        if (money > 0) {
+            return true;
+        }
+
+        return false;
+    }
+    
+    public boolean validateQuickExtraction(Double moneyQuickExtraction, Double availableBalance){
+        
+        if(moneyQuickExtraction <=(0.2* availableBalance)){
+        
+        return true;
+    }
+        
+        return false;
+    }
+
+    public Double depositarDinero(Double depositedMoney, Double availableBalance) {
+
+        return depositedMoney + availableBalance;
 
     }
 
-    public Double extraccionRapidaDinero(Double extraccionRapida, Double saldoActual) {
+    public Double retirarDinero(Double dineroARetirar, Double availableBalance) {
 
-        return saldoActual - extraccionRapida;
-
-    }
-
-    public String mostrarSaldo(Double saldoActual) {
-
-        return "El saldo actual es de " + saldoActual;
+        return (availableBalance - dineroARetirar);
 
     }
 
-    public void mostrarDatos(CuentaBanco cuentaBanco) {
+    public Double extraccionRapidaDinero(Double extraccionRapida, Double availableBalance) {
 
-        System.out.println("Numero de cuenta :  " + cuentaBanco.getNumeroCuenta()
+        return availableBalance - extraccionRapida;
+
+    }
+
+    public String mostrarSaldo(Double availableBalance) {
+
+        return "El saldo actual es de " + availableBalance;
+
+    }
+
+    public String mostrarDatos(CuentaBanco cuentaBanco) {
+
+        return "Numero de cuenta :  " + cuentaBanco.getAccountNumber()
                 + "Numero de Dni :  " + cuentaBanco.getNumDni()
-                + "Saldo Actual: "  + cuentaBanco.getSaldoActual());
+                + "Saldo Actual: " + cuentaBanco.getAvailableBalance();
 
     }
 
@@ -96,32 +148,60 @@ public class ServiciosBanco {
                 case 1:
                     System.out.println("Digite el dinero a depositar:");
                     double dineroIngresado = scan.nextDouble();
-                    cuentaBanco.setSaldoActual(depositarDinero(dineroIngresado, cuentaBanco.getSaldoActual()));
+
+                    if (validateTransaction(dineroIngresado)) {
+
+                        cuentaBanco.setAvailableBalance(depositarDinero(dineroIngresado, cuentaBanco.getAvailableBalance()));
+
+                    } else {
+
+                        System.out.println("ERROR, Transaction Failed! ");
+
+                    }
+
                     break;
                 case 2:
                     System.out.println("Digite el dinero a retirar:");
                     double dineroARetirar = scan.nextDouble();
-                    if (dineroARetirar > cuentaBanco.getSaldoActual()) {
-                        System.out.println("Saldo insuficiente");
+                    if (validateTransaction(dineroARetirar)) {
+
+                        if (dineroARetirar > cuentaBanco.getAvailableBalance()) {
+                            System.out.println("Saldo insuficiente");
+                        } else {
+                            cuentaBanco.setAvailableBalance(retirarDinero(dineroARetirar, cuentaBanco.getAvailableBalance()));
+                        }
+
                     } else {
-                        cuentaBanco.setSaldoActual(retirarDinero(dineroARetirar, cuentaBanco.getSaldoActual()));
+
+                        System.out.println("ERROR, Transaction Failed! ");
+
                     }
 
                     break;
                 case 3:
                     System.out.println("Ingrese el monto de extraccion rapida:");
                     double extraccionRapida = scan.nextDouble();
-                    while (extraccionRapida > 0.2 * cuentaBanco.getSaldoActual()) {
-                        System.out.println("Monto no permitido para extraccion rapida! Ingrese el monto nuevamente");
-                        extraccionRapida = scan.nextDouble();
+
+                    if (validateTransaction(extraccionRapida)) {
+
+                        while (!(validateQuickExtraction(extraccionRapida, cuentaBanco.getAvailableBalance()))) {
+                            System.out.println("Monto no permitido para extraccion rapida! Ingrese el monto nuevamente");
+                            extraccionRapida = scan.nextDouble();
+                        }
+                        cuentaBanco.setAvailableBalance(extraccionRapidaDinero(extraccionRapida, cuentaBanco.getAvailableBalance()));
+
+                    } else {
+
+                        System.out.println("ERROR, Transaction Failed! ");
+
                     }
-                    cuentaBanco.setSaldoActual(extraccionRapidaDinero(extraccionRapida, cuentaBanco.getSaldoActual()));
+
                     break;
                 case 4:
-                    System.out.println(mostrarSaldo(cuentaBanco.getSaldoActual()));
+                    System.out.println(mostrarSaldo(cuentaBanco.getAvailableBalance()));
                     break;
                 case 5:
-                    mostrarDatos(cuentaBanco);
+                    System.out.println(mostrarDatos(cuentaBanco));
 
                     break;
                 case 6:

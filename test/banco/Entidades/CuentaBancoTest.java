@@ -29,12 +29,12 @@ public class CuentaBancoTest {
         cuentaBanco = new CuentaBanco(accountNumberExpected, dniNumberExpected, bankBalanceExpected);
         CuentaBanco cuentaBancoTest = new CuentaBanco(0001,3555,1000.0);
         
-        assertEquals(cuentaBancoTest.getNumeroCuenta(),cuentaBanco.getNumeroCuenta());
+        assertEquals(cuentaBancoTest.getAccountNumber(),cuentaBanco.getAccountNumber());
         assertEquals(cuentaBancoTest.getNumDni(),cuentaBanco.getNumDni());
-        assertEquals(cuentaBancoTest.getSaldoActual(),cuentaBanco.getSaldoActual(),0.0);
-        assertNotNull(cuentaBanco.getNumeroCuenta());
+        assertEquals(cuentaBancoTest.getAvailableBalance(),cuentaBanco.getAvailableBalance(),0.0);
+        assertNotNull(cuentaBanco.getAccountNumber());
         assertNotNull(cuentaBanco.getNumDni());
-        assertNotNull(cuentaBanco.getSaldoActual());
+        assertNotNull(cuentaBanco.getAvailableBalance());
         assertEquals(toStringExpected, cuentaBanco.toString());
     }
     
